@@ -74,13 +74,20 @@ def build_excel(d):
     wsd=wb_w.get_sheet(1)
     for i,cat in enumerate(cats):
         sub=cat.get('subtotal',0)
+        cat_name_d=cat.get('cat_name','')
+        if cat_name_d:
+            wsd.write(i+1,0,f'{i+1}、{cat_name_d}',ST_TL)
         wsd.write(i+1,1,sub,ST_NUM); wsd.write(i+1,2,round(sub*1.1),ST_NUM)
     wsd.write(16,1,total,ST_NUM); wsd.write(16,2,round(total*1.1),ST_NUM)
 
-    for ci,wi,_,ds,tr in CATS:
+    for ci,wi,sh_num,ds,tr in CATS:
         ws=wb_w.get_sheet(wi)
         cat_d=cats[ci] if ci<len(cats) else {}
         sub=cat_d.get('subtotal',0); items=cat_d.get('items',[])
+        # カテゴリ名をシート(0,0)に書き込む
+        cat_name_raw=cat_d.get('cat_name','')
+        if cat_name_raw:
+            ws.write(0,0,f'{sh_num}、{cat_name_raw}',ST_TL)
         ws.write(0,6,sub,ST_TOTN)
         for r in range(ds,tr):
             ws.write(r,0,'',ST_TC); ws.write(r,1,'',ST_TL); ws.write(r,2,'',ST_TL)
