@@ -45,7 +45,7 @@ def build_excel(d):
     wb_r = xlrd.open_workbook(file_contents=base64.b64decode(TEMPLATE_B64), formatting_info=True)
     wb_w = copy(wb_r)
 
-    koji=d.get('koji',''); client=d.get('client',''); loc=d.get('loc','')
+    koji=d.get('koji',''); client=d.get('client',''); honorific=d.get('honorific','御中'); loc=d.get('loc','')
     sqm=d.get('sqm'); tsubo=d.get('tsubo'); period=d.get('period','')
     date_s=d.get('date_serial',0); discount=int(d.get('discount',0))
     cats=d.get('cats',[])
@@ -58,7 +58,7 @@ def build_excel(d):
     if sqm:   ws0.write(7,1,float(sqm),ST_CN)
     if tsubo: ws0.write(8,1,float(tsubo),ST_CN)
     ws0.write(9,1,period,ST_CT)
-    ws0.write(10,3,(client+'　御中') if client else '　御中', ST_GCHU)
+    ws0.write(10,3,(client+'　'+honorific) if client else ('　'+honorific), ST_GCHU)
     if date_s: ws0.write(4,11,date_s,ST_CDATE)
     ws0.write(13,3,f'御見積金額　{fmt(gokei)}円（消費税別途）',ST_BIG)
     ws0.write(19,9,total,ST_CN); ws0.write(20,9,discount,ST_CN)
